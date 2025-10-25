@@ -59,6 +59,7 @@ def get_db_connection():
     conn = sqlite3.connect(DATABASE_NAME)
     conn.row_factory = sqlite3.Row
     return conn
+init_db()
 
 @app.route('/')
 def index():
@@ -288,5 +289,4 @@ def ver_resultados(id_encuesta):
 
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
