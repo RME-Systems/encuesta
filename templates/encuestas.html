@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Gestión de Encuestas</h1>
+  <a href="{{ url_for('nueva_encuesta')}}" class="btn btn-success mb-2">Nueva Encuesta</a>
+
+  <table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in encuestas %}
+            <tr>
+                <td>{{ item.titulo }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>{{ item.fecha_creacion }}</td>
+                <td>
+                    <a href="{{ url_for('ver_preguntas', id_encuesta=item.id) }}" class="btn btn-info btn-sm">Preguntas</a>
+                    <a href="{{ url_for('responder_encuesta', id_encuesta=item.id) }}" class="btn btn-primary btn-sm">Responder</a>
+                    <a href="{{ url_for('ver_resultados', id_encuesta=item.id) }}" class="btn btn-warning btn-sm">Resultados</a>
+                    <a href="{{ url_for('editar_encuesta', id=item.id) }}" class="btn btn-secondary btn-sm">Editar</a>
+                    <a href="{{ url_for('eliminar_encuesta', id=item.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro?')">Eliminar</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

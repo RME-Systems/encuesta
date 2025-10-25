@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>{% if usuario %}Editar{% else %}Nuevo{% endif %} Usuario</h2>
+    </div>
+    <div class="card-body">
+        <form action="" method="POST">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" name="nombre" value="{{ usuario.nombre if usuario }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo</label>
+                <input type="email" class="form-control" name="correo" value="{{ usuario.correo if usuario }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="rol" class="form-label">Rol</label>
+                <select name="rol" class="form-select" required>
+                    <option value="usuario" {% if usuario and usuario.rol == 'usuario' %}selected{% endif %}>Usuario</option>
+                    <option value="admin" {% if usuario and usuario.rol == 'admin' %}selected{% endif %}>Admin</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

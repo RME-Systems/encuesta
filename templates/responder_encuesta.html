@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>{{ encuesta.titulo }}</h1>
+        <p>{{ encuesta.descripcion }}</p>
+    </div>
+    <div class="card-body">
+        <form action="" method="POST">
+            
+            <div class="mb-3">
+                <label for="id_usuario" class="form-label">¿Quién está respondiendo?</label>
+                <select name="id_usuario" class="form-select" required>
+                    <option value="">-- Seleccione su nombre --</option>
+                    {% for u in usuarios %}
+                    <option value="{{ u.id }}">{{ u.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <hr>
+
+            {% for p in preguntas %}
+            <div class="mb-4">
+                <label class="form-label"><strong>{{ p.texto_pregunta }}</strong></label>
+                
+                <input type="hidden" name="tipo_{{ p.id }}" value="{{ p.tipo }}">
+                
+                {% if p.tipo == 'escala' %}
+                <div class="d-flex justify-content-between">
+                    <label>1 (Poco)</label>
+                    <label>2</label>
+                    <label>3</label>
+                    <label>4</label>
+                    <label>5 (Mucho)</label>
+                </div>
+                <input type="range" class="form-range" min="1" max="5" step="1" name="pregunta_{{ p.id }}" required>
+                
+                {% elif p.tipo == 'texto' %}
+                <textarea class="form-control" name="pregunta_{{ p.id }}" rows="3" required></textarea>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary btn-lg">Enviar Respuestas</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

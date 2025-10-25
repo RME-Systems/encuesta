@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+  <a href="{{ url_for('ver_encuestas') }}" class="btn btn-secondary mb-3">&larr; Volver a Encuestas</a>
+  <h1>Resultados: {{ encuesta.titulo }}</h1>
+
+  {% for r in resultados %}
+  <div class="card mb-3">
+    <div class="card-header">
+      <strong>{{ r.texto_pregunta }}</strong> (Tipo: {{ r.tipo }})
+    </div>
+    <div class="card-body">
+      {% if r.tipo == 'escala' %}
+        <p>Total de Respuestas: <strong>{{ r.total }}</strong></p>
+        <p>Promedio: <strong>{{ r.promedio }}</strong> / 5 [cite: 9]</p>
+        
+        <h5>Distribución de Respuestas</h5>
+        <div style="max-width: 600px;">
+          <canvas id="chart-{{ loop.index }}"></canvas>
+        </div>
+        <script>
+          new Chart(document.getElementById('chart-{{ loop.index }}'), {
+            type: 'bar',
+            data: {
+              labels: {{ r.chart_labels | tojson }},
+              datasets: [{
+                label: 'Cantidad de Respuestas',
+                data: {{ r.chart_data | tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+              }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Valoración' } },
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+          });
+        </script>
+
+      {% elif r.tipo == 'texto' %}
+        <h5>Respuestas Abiertas:</h5>
+        <ul class="list-group">
+          {% for resp in r.respuestas %}
+            <li class="list-group-item">{{ resp }}</li>
+          {% else %}
+            <li class="list-group-item">Sin respuestas de texto.</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+{% endblock %}
